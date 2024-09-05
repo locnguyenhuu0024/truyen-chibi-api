@@ -1,0 +1,15 @@
+{
+    "recommendations": [
+        "naumovs.color-highlight",
+        "dracula-theme.theme-dracula",
+        "dbaeumer.vscode-eslint",
+        "waderyan.gitblame",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "pkief.material-icon-theme",
+        "esbenp.prettier-vscode",
+        "streetsidesoftware.code-spell-checker",
+        "formulahendry.auto-complete-tag"
+    ]
+}

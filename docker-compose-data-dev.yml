@@ -1,0 +1,21 @@
+version: '3'
+services:
+  database:
+    platform: linux/x86_64
+    container_name: truyen_chibi
+    image: mysql:8.4
+    environment:
+      - MYSQL_DATABASE=truyen_chibi_local
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=HiProCoach123@
+      - MYSQL_ROOT_PASSWORD=secret
+    ports:
+      - 3306:3306
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: unless-stopped
+    external_links:
+      - 'host.docker.internal:host-gateway'
+volumes:
+  dbdata:

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  prod:
+    build: .
+    container_name: oovoom-gps-server-api
+    expose:
+      - "1337"
+      - "8089"
+    ports:
+      - "1337:1337"
+      - "8089:8089"
+    restart: unless-stopped
+    volumes:
+      - ./:/app
+      - node_modules_gps_server_api:/app/node_modules
+volumes:
+  node_modules_gps_server_api:

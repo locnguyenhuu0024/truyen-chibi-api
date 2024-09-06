@@ -7,7 +7,7 @@ import { json, urlencoded } from 'express';
 import { loadEnv } from './utils';
 import helmet from 'helmet';
 import * as morgan from 'morgan-body';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+// import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { I18nCommonService } from './i18n/i18n.common.service';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { OperationObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
@@ -19,26 +19,26 @@ loadEnv();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
-  const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
+  // const logger = app.get(WINSTON_MODULE_NEST_PROVIDER);
   const i18service = app.get(I18nCommonService);
-  app.useLogger(logger);
+  // app.useLogger(logger);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new HttpExceptionFilter(i18service));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const swaggerConfigTemp = new DocumentBuilder()
-    .setTitle('Hi Pro Coach system')
-    .setDescription('The Hi Pro Coach APIs description')
+    .setTitle('Truyen Chibi system')
+    .setDescription('The Truyen Chibi APIs description')
     .setVersion('1.0')
-    .addTag('Hi Pro Coach project')
+    .addTag('Truyen Chibi project')
     .addBearerAuth()
     .setExternalDoc('swagger document JSON', '/doc.json');
 
   if (configService.get('NODE_ENV') === 'local') {
     swaggerConfigTemp.addServer('http://localhost:8089/api');
   } else {
-    swaggerConfigTemp.addServer('https://api-gps.oovoom.com/api');
+    swaggerConfigTemp.addServer('https://truyen-chibi-api.vercel.app/api');
   }
   const swaggerConfig = swaggerConfigTemp.build();
 
@@ -68,31 +68,31 @@ async function bootstrap() {
   app.use(helmet());
   app.use(helmet.hidePoweredBy());
   app.use(helmet.contentSecurityPolicy());
-  if (configService.get('NODE_ENV') === 'local') {
-    (morgan as any)(app.getHttpAdapter().getInstance(), {
-      stream: {
-        write: (message: string) => {
-          logger.log(message);
-          return true;
-        },
-      },
-      logRequestBody: false,
-      logResponseBody: false,
-      noColors: false,
-      // maxBodyLength: 5_000_000,
-    });
-  } else {
-    (morgan as any)(app.getHttpAdapter().getInstance(), {
-      stream: {
-        write: (message: string) => {
-          logger.log(message);
-          return true;
-        },
-      },
-      noColors: true,
-      maxBodyLength: 5_000_000,
-    });
-  }
+  // if (configService.get('NODE_ENV') === 'local') {
+  //   (morgan as any)(app.getHttpAdapter().getInstance(), {
+  //     stream: {
+  //       write: (message: string) => {
+  //         // logger.log(message);
+  //         return true;
+  //       },
+  //     },
+  //     logRequestBody: false,
+  //     logResponseBody: false,
+  //     noColors: false,
+  //     // maxBodyLength: 5_000_000,
+  //   });
+  // } else {
+  //   (morgan as any)(app.getHttpAdapter().getInstance(), {
+  //     stream: {
+  //       write: (message: string) => {
+  //         // logger.log(message);
+  //         return true;
+  //       },
+  //     },
+  //     noColors: true,
+  //     maxBodyLength: 5_000_000,
+  //   });
+  // }
 
   await app.listen(configService.get('SERVER_PORT') || 8089);
 }

@@ -6,7 +6,7 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
 import { loadEnv } from './utils';
 import helmet from 'helmet';
-import * as morgan from 'morgan-body';
+// import * as morgan from 'morgan-body';
 // import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { I18nCommonService } from './i18n/i18n.common.service';
 import { HttpExceptionFilter } from './filters/http-exception.filter';

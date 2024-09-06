@@ -19,12 +19,11 @@ export const I18nProvider: DynamicModule = I18nModule.forRootAsync({
   ],
 });
 
-export function buildOptions(
-  configService: ConfigService,
-): I18nOptionsWithoutResolvers {
-  const lang = configService.getOrThrow('FALLBACK_LANGUAGE');
+export function buildOptions(): I18nOptionsWithoutResolvers {
+  // configService: ConfigService,
+  // const lang = configService.getOrThrow('FALLBACK_LANGUAGE');
   return {
-    fallbackLanguage: lang,
+    fallbackLanguage: 'en',
     // fallbacks: {
     //   'en-CA': 'fr',
     //   'en-*': 'en',

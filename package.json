@@ -14,6 +14,7 @@
     "start:dev": "NODE_ENV=local nest start --watch",
     "start:debug": "NODE_ENV=local nest start --debug --watch",
     "start:prod": "yarn seed:prod && node dist/main",
+    "start:prod-no-db": "yarn node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "typeorm": "ts-node ./node_modules/typeorm/cli",
     "m:r": "yarn build && yarn run typeorm migration:run -- -d ./src/database/config/data-source.ts ",

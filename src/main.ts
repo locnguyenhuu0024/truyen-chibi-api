@@ -28,17 +28,17 @@ async function bootstrap() {
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const swaggerConfigTemp = new DocumentBuilder()
-    .setTitle('Hi Pro Coach system')
-    .setDescription('The Hi Pro Coach APIs description')
+    .setTitle('Truyen Chibi system')
+    .setDescription('The Truyen Chibi APIs description')
     .setVersion('1.0')
-    .addTag('Hi Pro Coach project')
+    .addTag('Truyen Chibi project')
     .addBearerAuth()
     .setExternalDoc('swagger document JSON', '/doc.json');
 
   if (configService.get('NODE_ENV') === 'local') {
     swaggerConfigTemp.addServer('http://localhost:8089/api');
   } else {
-    swaggerConfigTemp.addServer('https://api-gps.oovoom.com/api');
+    swaggerConfigTemp.addServer('https://truyen-chibi-api.vercel.app/api');
   }
   const swaggerConfig = swaggerConfigTemp.build();
 

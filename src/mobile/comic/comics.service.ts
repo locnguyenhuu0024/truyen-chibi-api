@@ -6,6 +6,7 @@ import { ExternalComicsService } from 'src/external/comics/external.comics.servi
 import { RequestWithPage } from 'src/utils/common/base.type';
 import { CategoryDto } from 'src/external/dtos/comic.dto';
 import { ChapterResponse } from './dtos/comic.dto';
+import { Comic } from 'src/utils/types/comic';
 
 @Injectable()
 export class ComicsService extends BaseService {
@@ -57,5 +58,16 @@ export class ComicsService extends BaseService {
       chapter_name,
       comic_name: comic_name.replace(/\s*\[.*?\]$/, ''),
     };
+  }
+
+  async getComicsByCategory(
+    categorySlug: string,
+    page: number,
+  ): Promise<Comic[]> {
+    const comics = await this.externalExternalService.getComicsByCategory(
+      categorySlug,
+      page,
+    );
+    return comics;
   }
 }

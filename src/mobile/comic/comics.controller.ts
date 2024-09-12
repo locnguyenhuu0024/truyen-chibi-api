@@ -10,6 +10,7 @@ import { ComicsService } from './comics.service';
 import { RequestWithPage } from 'src/utils/common/base.type';
 import { CategoryDto } from 'src/external/dtos/comic.dto';
 import { ChapterResponse } from './dtos/comic.dto';
+import { Comic } from 'src/utils/types/comic';
 
 @ApiTags(ComicsTag, 'comics')
 @Controller('comics')
@@ -58,5 +59,15 @@ export class ComicsController extends BaseController {
   @Get('chapter/:id')
   async getChapterById(@Param('id') chapterId): Promise<ChapterResponse> {
     return await this.service.getChapterById(chapterId);
+  }
+
+  @ApiOperation({ summary: 'get categories' })
+  @ApiUnauthorizedResponse({ status: 401, description: 'Unauthorized.' })
+  @Get('categories/:categorySlug')
+  async getComicsByCategory(
+    @Param('categorySlug') categorySlug,
+    @Query() query: RequestWithPage,
+  ): Promise<Comic[]> {
+    return await this.service.getComicsByCategory(categorySlug, query.page);
   }
 }

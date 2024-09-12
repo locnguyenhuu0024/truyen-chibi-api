@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { RequestWithPage } from 'src/utils/common/base.type';
 import { CategoryDto } from '../dtos/comic.dto';
 import { Chapter } from 'src/utils/types/chapter';
+import { Comic } from 'src/utils/types/comic';
 
 @Injectable()
 export class ExternalComicsService extends BaseService {
@@ -45,6 +46,21 @@ export class ExternalComicsService extends BaseService {
     try {
       const res = await this.httpService.axiosRef.get(
         `${this.comicsAPI}/the-loai`,
+      );
+      return res.data?.data?.items;
+    } catch (error: any) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async getComicsByCategory(
+    categorySlug: string,
+    page: number,
+  ): Promise<Comic[]> {
+    try {
+      const res = await this.httpService.axiosRef.get(
+        `${this.comicsAPI}/the-loai/${categorySlug}?page=${page}`,
       );
       return res.data?.data?.items;
     } catch (error: any) {

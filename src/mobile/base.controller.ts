@@ -8,7 +8,7 @@ import { HttpExceptionOptions } from '@nestjs/common';
   required: false,
 })
 @ApiBearerAuth()
-@ApiTags('Manage Hi Pro Coach')
+@ApiTags('Manage Truyen Chibi')
 // @UseGuards(AuthGuard)
 export class BaseController {
   protected badResponse(

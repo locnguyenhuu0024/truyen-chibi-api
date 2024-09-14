@@ -8,7 +8,6 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import * as moment from 'moment';
 import { SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from 'src/utils/appConstant';
@@ -23,33 +22,17 @@ export class AuthGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
-      return true;
-    }
     const request = context.switchToHttp().getRequest();
-    const token =
-      this.extractTokenFromHeaderFromOovoom(request) ||
-      this.extractTokenFromHeader(request);
+    const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
     try {
       const payload = await this.jwtService.verifyAsync(token, {
-        secret: this.configService.get('JWT_KEY_END_USER'),
+        secret: this.configService.get('JWT_SECRET'),
       });
-
-      if (payload.exp < moment().unix()) {
-        throw new Error('INVALID_TOKEN');
-      }
-      // 💡 We're assigning the payload to the request object here
-      // so that we can access it in our route handlers
       request['user'] = { ...payload };
     } catch (err) {
-      this.logger.log(err);
       throw new UnauthorizedException();
     }
     return true;
@@ -58,13 +41,6 @@ export class AuthGuard implements CanActivate {
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
-  }
-
-  private extractTokenFromHeaderFromOovoom(
-    request: Request,
-  ): string | undefined {
-    const token = request.headers.token as string;
-    return token || undefined;
   }
 }
 

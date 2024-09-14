@@ -48,14 +48,18 @@ export class AuthService extends BaseService {
     }
 
     const payload = { email: user.email, sub: user.id };
-    const access_token = this.jwtService.sign(payload, {
+    const access_token = await this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_EXPIRATION_TIME'),
+      expiresIn: this.configService.get<number>('JWT_EXPIRATION_TIME'),
     });
-    const refresh_token = this.jwtService.sign(payload, {
+    console.log(access_token);
+    const refresh_token = await this.jwtService.signAsync(payload, {
       secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRATION_TIME'),
     });
+
+    // Lưu refresh token vào database
+    await this.userService.saveRefreshToken(user.id, refresh_token);
 
     const response: LoginResponseDto = {
       access_token,
@@ -67,6 +71,7 @@ export class AuthService extends BaseService {
       birth: user.birth,
       gender: user.gender,
       avatar_url: user.avatar_url,
+      user_name: user.user_name,
     };
 
     return response;
@@ -74,9 +79,19 @@ export class AuthService extends BaseService {
 
   async refresh(refresh_token: string): Promise<Token> {
     try {
-      const payload = this.jwtService.verify(refresh_token, {
+      const payload = await this.jwtService.verifyAsync(refresh_token, {
         secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
       });
+
+      // Kiểm tra xem refresh token có tồn tại trong database không
+      const isValidRefreshToken = await this.userService.validateRefreshToken(
+        payload.sub,
+        refresh_token,
+      );
+      if (!isValidRefreshToken) {
+        throw new UnauthorizedException('Invalid refresh token');
+      }
+
       const newAccessToken = this.jwtService.sign(
         { email: payload.email, sub: payload.sub },
         {
@@ -88,5 +103,10 @@ export class AuthService extends BaseService {
     } catch (e) {
       throw new UnauthorizedException('Invalid refresh token');
     }
+  }
+
+  async logout(userId: number): Promise<void> {
+    // Xóa refresh token khỏi database khi đăng xuất
+    await this.userService.removeRefreshToken(userId);
   }
 }

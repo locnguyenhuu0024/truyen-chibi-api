@@ -245,6 +245,7 @@ const appConstant = Object.freeze({
     CATEGORY: 'category',
     COMIC: 'comic',
     VIEW: 'view',
+    HISTORY: 'history',
   },
   REPORT_TYPE: {
     MONTHLY: 'monthly',

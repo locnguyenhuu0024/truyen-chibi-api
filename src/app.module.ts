@@ -29,7 +29,7 @@ import { ExternalComicsModule } from './external/comics/external.comics.module.j
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('HiProCoach API', {
+            nestWinstonModuleUtilities.format.nestLike('Truyen Chibi API', {
               colors: true,
               prettyPrint: true,
             }),
@@ -39,7 +39,7 @@ import { ExternalComicsModule } from './external/comics/external.comics.module.j
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('HiProCoach API', {
+            nestWinstonModuleUtilities.format.nestLike('Truyen Chibi API', {
               colors: true,
               prettyPrint: true,
             }),
@@ -51,7 +51,7 @@ import { ExternalComicsModule } from './external/comics/external.comics.module.j
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('HiProCoach API', {
+            nestWinstonModuleUtilities.format.nestLike('Truyen Chibi API', {
               colors: true,
               prettyPrint: true,
             }),
@@ -63,7 +63,7 @@ import { ExternalComicsModule } from './external/comics/external.comics.module.j
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('HiProCoach API', {
+            nestWinstonModuleUtilities.format.nestLike('Truyen Chibi API', {
               colors: true,
               prettyPrint: true,
             }),

@@ -15,9 +15,9 @@ export class UsersService extends BaseService {
     @InjectRepository(UserEntity)
     private usersRepository: Repository<UserEntity>,
     protected uploadFileService: UploadFileService,
-    protected i8nCommonService: I18nCommonService,
+    protected i18nCommonService: I18nCommonService,
   ) {
-    super(i8nCommonService);
+    super(i18nCommonService);
   }
 
   async findByEmail(email: string): Promise<UserEntity> {
@@ -32,16 +32,33 @@ export class UsersService extends BaseService {
     if (user) this.badResponse('USER.REGISTER.EMAIL_IS_EXIST');
 
     const hashedPassword = await encryptPassword(request.password);
-
-    const avatar_url = await this.uploadFileService.upload_image(
-      request.avatar,
-    );
+    let avatar_url = '';
+    if (request.avatar) {
+      avatar_url = await this.uploadFileService.upload_image(request.avatar);
+    }
 
     const userEntity: UserEntity = {
       ...request,
       password: hashedPassword,
       avatar_url,
+      refreshToken: null,
     };
     return await this.usersRepository.save(userEntity);
+  }
+
+  async saveRefreshToken(userId: number, refreshToken: string): Promise<void> {
+    await this.usersRepository.update(userId, { refreshToken });
+  }
+
+  async validateRefreshToken(
+    userId: number,
+    refreshToken: string,
+  ): Promise<boolean> {
+    const user = await this.usersRepository.findOne({ where: { id: userId } });
+    return user?.refreshToken === refreshToken;
+  }
+
+  async removeRefreshToken(userId: number): Promise<void> {
+    await this.usersRepository.update(userId, { refreshToken: null });
   }
 }

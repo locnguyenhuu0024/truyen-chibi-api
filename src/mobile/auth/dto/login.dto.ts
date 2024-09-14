@@ -44,4 +44,7 @@ export class LoginResponseDto extends BaseDto {
 
   @ApiProperty()
   refresh_token: string;
+
+  @ApiProperty()
+  user_name: string;
 }

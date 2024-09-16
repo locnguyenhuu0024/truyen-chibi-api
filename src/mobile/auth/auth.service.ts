@@ -25,7 +25,10 @@ export class AuthService extends BaseService {
     const user = await this.userService.create(signupDto);
     const payload = { email: user.email, sub: user.id };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: await this.jwtService.signAsync(payload, {
+        secret: this.configService.get<string>('JWT_SECRET'),
+        expiresIn: this.configService.get<number>('JWT_EXPIRATION_TIME'),
+      }),
     };
   }
 

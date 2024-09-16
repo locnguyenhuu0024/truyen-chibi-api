@@ -17,17 +17,33 @@ export class AuthService extends BaseService {
     private jwtService: JwtService,
     private configService: ConfigService,
     protected i8nCommonService: I18nCommonService,
+    private jwtSecret: string,
+    private jwtRefreshExpireTime: number,
+    private jwtExpireTime: number,
+    private jwtRefreshSecret: string,
   ) {
     super(i8nCommonService);
+    this.jwtSecret = this.configService.get<string>('JWT_SECRET');
+    this.jwtExpireTime = this.configService.get<number>('JWT_EXPIRATION_TIME');
+    this.jwtRefreshExpireTime = this.configService.get<number>(
+      'JWT_REFRESH_EXPIRATION_TIME',
+    );
+    this.jwtRefreshSecret =
+      this.configService.get<string>('JWT_REFRESH_SECRET');
   }
 
-  async signup(signupDto: SignupDto): Promise<Token> {
+  async signup(signupDto: SignupDto): Promise<LoginResponseDto> {
     const user = await this.userService.create(signupDto);
     const payload = { email: user.email, sub: user.id };
     return {
+      ...user,
       access_token: await this.jwtService.signAsync(payload, {
-        secret: this.configService.get<string>('JWT_SECRET'),
-        expiresIn: this.configService.get<number>('JWT_EXPIRATION_TIME'),
+        secret: this.jwtSecret,
+        expiresIn: this.jwtExpireTime,
+      }),
+      refresh_token: await this.jwtService.signAsync(payload, {
+        secret: this.jwtRefreshSecret,
+        expiresIn: this.jwtRefreshExpireTime,
       }),
     };
   }
@@ -52,13 +68,12 @@ export class AuthService extends BaseService {
 
     const payload = { email: user.email, sub: user.id };
     const access_token = await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_SECRET'),
-      expiresIn: this.configService.get<number>('JWT_EXPIRATION_TIME'),
+      secret: this.jwtSecret,
+      expiresIn: this.jwtExpireTime,
     });
-    console.log(access_token);
     const refresh_token = await this.jwtService.signAsync(payload, {
-      secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
-      expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRATION_TIME'),
+      secret: this.jwtRefreshSecret,
+      expiresIn: this.jwtRefreshExpireTime,
     });
 
     // Lưu refresh token vào database

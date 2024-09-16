@@ -20,29 +20,24 @@ export class HistoryService extends BaseService {
       const checkHistory = await this.historyRepository.findOneBy({
         slug: historyDto.slug,
       });
-      const historyEntity: HistoryEntity = {
-        slug: historyDto.slug,
-        thumbnail: historyDto.thumbnail,
-        read_chapter_ids: [],
-        user_id: historyDto.user_id,
-        name: historyDto.name,
-        latest_read_chapter: historyDto.latest_read_chapter,
-      };
 
       if (checkHistory) {
-        historyEntity.read_chapter_ids = [
-          ...checkHistory.read_chapter_ids,
-          historyDto.latest_read_chapter_id,
-        ];
-        historyEntity.id = checkHistory.id;
-        return await this.historyRepository.save(historyEntity);
+        return await this.updateHistoryInternal(historyDto, checkHistory);
       } else {
+        const historyEntity: HistoryEntity = {
+          slug: historyDto.slug,
+          thumbnail: historyDto.thumbnail,
+          read_chapter_ids: [],
+          user_id: historyDto.user_id,
+          name: historyDto.name,
+          latest_read_chapter: historyDto.latest_read_chapter,
+        };
         historyEntity.read_chapter_ids = [historyDto.latest_read_chapter_id];
         historyEntity.latest_read_chapter = historyDto.latest_read_chapter;
         return await this.historyRepository.save(historyEntity);
       }
     } catch (error) {
-      throw this.badResponse('COMMON.CREATE_DATA_IS_UNSUCCESSFULLY');
+      throw this.badResponse('COMMON.CREATE_DATA_IS_UNSUCCESSFULLY', error);
     }
   }
 
@@ -56,5 +51,21 @@ export class HistoryService extends BaseService {
       where: { user_id: userId },
     });
     return { count, rows: histories };
+  }
+
+  async updateHistoryInternal(
+    dataUpdate: HistoryDto,
+    data: HistoryEntity,
+  ): Promise<any> {
+    try {
+      data.read_chapter_ids = [
+        ...data.read_chapter_ids,
+        dataUpdate.latest_read_chapter_id,
+      ];
+
+      await this.historyRepository.save(data);
+    } catch (error) {
+      throw this.badResponse('COMMON.UPDATE_DATA_IS_UNSUCCESSFULLY', error);
+    }
   }
 }

@@ -27,13 +27,12 @@ export class HistoryService extends BaseService {
         const historyEntity: HistoryEntity = {
           slug: historyDto.slug,
           thumbnail: historyDto.thumbnail,
-          read_chapter_ids: [],
+          read_chapter_ids: [historyDto.latest_read_chapter_id],
           user_id: historyDto.user_id,
           name: historyDto.name,
           latest_read_chapter: historyDto.latest_read_chapter,
+          latest_read_chapter_id: historyDto.latest_read_chapter_id,
         };
-        historyEntity.read_chapter_ids = [historyDto.latest_read_chapter_id];
-        historyEntity.latest_read_chapter = historyDto.latest_read_chapter;
         return await this.historyRepository.save(historyEntity);
       }
     } catch (error) {
@@ -62,8 +61,10 @@ export class HistoryService extends BaseService {
         ...data.read_chapter_ids,
         dataUpdate.latest_read_chapter_id,
       ];
+      data.latest_read_chapter_id = dataUpdate.latest_read_chapter_id;
+      data.read_chapter_ids = [...new Set(data.read_chapter_ids)];
 
-      await this.historyRepository.save(data);
+      return await this.historyRepository.save(data);
     } catch (error) {
       throw this.badResponse('COMMON.UPDATE_DATA_IS_UNSUCCESSFULLY', error);
     }

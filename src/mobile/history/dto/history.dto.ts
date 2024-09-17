@@ -13,7 +13,7 @@ export class HistoryDto {
   slug: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   name: string;
 
@@ -28,7 +28,7 @@ export class HistoryDto {
   latest_read_chapter: string;
 
   @ApiProperty()
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   latest_read_chapter_id: string;
 }

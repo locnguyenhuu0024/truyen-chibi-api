@@ -2,6 +2,7 @@ export const MAX_RETRY_LOGIN: number = 5;
 export const MobileTag = 'Mobile';
 export const ManageTag = 'Manage';
 export const ComicsTag = 'Comics';
+export const HistoriesTag = 'Histories';
 
 const appConstant = Object.freeze({
   NUMBER_MAX_EMAIL: 250,

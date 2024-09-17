@@ -23,6 +23,9 @@ export class HistoryEntity extends BaseEntity {
   @Column()
   latest_read_chapter?: string;
 
+  @Column()
+  latest_read_chapter_id?: string;
+
   @JoinColumn({ name: 'user_id' })
   @ManyToOne(() => UserEntity)
   user?: UserEntity;

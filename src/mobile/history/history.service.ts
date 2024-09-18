@@ -61,6 +61,7 @@ export class HistoryService extends BaseService {
         ...data.read_chapter_ids,
         dataUpdate.latest_read_chapter_id,
       ];
+      data.latest_read_chapter = dataUpdate.latest_read_chapter;
       data.latest_read_chapter_id = dataUpdate.latest_read_chapter_id;
       data.read_chapter_ids = [...new Set(data.read_chapter_ids)];
 

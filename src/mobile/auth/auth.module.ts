@@ -24,7 +24,14 @@ import { UsersModule } from '../users/users.module';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, JwtStrategy, RefreshTokenStrategy, String, Number],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    RefreshTokenStrategy,
+    String,
+    Number,
+    Object,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

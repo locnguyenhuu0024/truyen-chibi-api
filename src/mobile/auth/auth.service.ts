@@ -18,8 +18,8 @@ export class AuthService extends BaseService {
     private configService: ConfigService,
     protected i8nCommonService: I18nCommonService,
     private jwtSecret: string,
-    private jwtRefreshExpireTime: number,
-    private jwtExpireTime: number,
+    private jwtRefreshExpireTime: number | string,
+    private jwtExpireTime: number | string,
     private jwtRefreshSecret: string,
   ) {
     super(i8nCommonService);

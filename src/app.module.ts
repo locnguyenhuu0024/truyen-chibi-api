@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DatabaseProvider } from './database/orm/database.provider.ts';
+import { DatabaseProvider } from './database/orm/database.provider';
 
 import typeormConfig from 'src/database/config/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';

@@ -1,4 +1,7 @@
-FROM node:20.11.1-alpine
+FROM node:20.14.0-alpine
+
+# Set Node.js memory limit
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 
 # Create app directory
 WORKDIR /app
